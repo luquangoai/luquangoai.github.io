@@ -36,7 +36,7 @@ nav a:hover,nav a.active{background:var(--pri-hl);color:var(--pri);font-weight:5
 .ttoggle:hover{background:var(--pri-hl);color:var(--pri);}
 
 /* LAYOUT */
-.wrap{max-width:860px;margin:0 auto;width:100%;padding:2rem 1.5rem;gap:2rem;display:flex;}
+.wrap{max-width:1160px;margin:0 auto;width:100%;padding:2rem 2rem;gap:2.5rem;display:flex;}
 .sidebar{width:232px;flex-shrink:0;}
 .scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem 1.25rem;text-align:center;position:sticky;top:68px;box-shadow:var(--sh-sm);}
 .sphoto{width:116px;height:116px;border-radius:50%;object-fit:cover;object-position:center 18%;border:3px solid var(--pri-hl);margin:0 auto 1rem;}
