@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
 <header>
   <a href="index.html" class="hname">Lu Quang Oai <span>/ Doctoral Researcher</span></a>
   <nav>
@@ -33,11 +32,10 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
 </header>
-
+<div class="wrap pub-only">
+  <main class="main">
 <!-- ══ PAGE: RESEARCH OUTPUTS ══════════════════════════════ -->
-<div class="page" id="page-outputs">
-  <div class="outputs-wrap">
-    <section class="sec" id="publications">
+<section class="sec" id="publications">
     <h2 class="stitle">Publications</h2>
     <p class="pgl">Journal:</p>
     <ol class="pol">
@@ -82,10 +80,13 @@
   </section>
   </div>
 
-    
-  </div>
+    </main>
 </div>
 
+<div id="lb-overlay" onclick="lbClose()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center;">
+  <img id="lb-img" src="" alt="" style="max-width:90vw;max-height:90vh;border-radius:8px;">
+</div>
+<style>#lb-overlay.active{display:flex;}</style>
 <footer>© 2026 Lu Quang Oai · Environmental &amp; Occupational Health Researcher · National Cheng Kung University, Taiwan</footer>
 
 <script>
