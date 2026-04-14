@@ -538,25 +538,69 @@
   </script>
 
 
-  <!-- Lightbox overlay -->
-  <div id="lb-overlay" onclick="lbClose()">
-    <img id="lb-img" src="" alt="Enlarged graphical abstract" style="max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6);"/>
-    <button onclick="lbClose()" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;line-height:1;" aria-label="Close">&times;</button>
-  </div>
+<!-- Lightbox overlay -->
+<div id="lb-overlay">
+  <img id="lb-img" src="" alt="Enlarged graphical abstract"/>
+  <button id="lb-close-btn" aria-label="Close">&times;</button>
+</div>
+
 <style>
   #lb-overlay {
     display: none;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.88);
-    z-index: 9999;
+    z-index: 99999;
     align-items: center;
     justify-content: center;
     cursor: zoom-out;
   }
-  #lb-overlay.active { display: flex; }
-  #lb-img { max-width:92vw; max-height:92vh; border-radius:8px; object-fit:contain; }
-  .sp-ga-img { cursor: zoom-in; }
+  #lb-overlay.active { display: flex !important; }
+  #lb-img {
+    max-width: 92vw;
+    max-height: 92vh;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 8px 40px rgba(0,0,0,.7);
+    cursor: default;
+  }
+  #lb-close-btn {
+    position: absolute;
+    top: 1rem; right: 1.4rem;
+    background: none; border: none;
+    color: #fff; font-size: 2.4rem;
+    cursor: pointer; line-height: 1;
+    z-index: 100000;
+  }
+  .sp-ga-img { cursor: zoom-in !important; }
 </style>
+
+<script>
+  window.lbOpen = function(src) {
+    var o = document.getElementById('lb-overlay');
+    var i = document.getElementById('lb-img');
+    if (!o || !i) return;
+    i.src = src;
+    o.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+  window.lbClose = function(e) {
+    if (e) e.stopPropagation();
+    var o = document.getElementById('lb-overlay');
+    if (o) o.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    var overlay = document.getElementById('lb-overlay');
+    var closeBtn = document.getElementById('lb-close-btn');
+    if (overlay) overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) window.lbClose();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', window.lbClose);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') window.lbClose();
+    });
+  });
+</script>
 </body>
 </html>
