@@ -70,42 +70,6 @@
       .catch(function(){});
   })();
 
-// ── Page switcher ────────────────────────────────────────────
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-  window.scrollTo(0, 0);
-  // update hash without jump
-  history.replaceState(null, '', '#' + name);
-}
-
-// On load: check hash
-(function() {
-  var h = location.hash.replace('#','');
-  if (h === 'outputs') showPage('outputs');
-})();
-
-// ── Sub-nav active highlight on scroll (About Me page) ───────
-(function() {
-  var links = document.querySelectorAll('.subnav a');
-  if (!links.length) return;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var id = entry.target.id;
-        links.forEach(function(l) {
-          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
-        });
-      }
-    });
-  }, { rootMargin: '-30% 0px -60% 0px' });
-  document.querySelectorAll('#page-about .sec[id]').forEach(function(s) {
-    observer.observe(s);
-  });
-})();
-
 function spCopy(btn,text){
     var t=text.replace(/\\n/g,'\n');
     navigator.clipboard.writeText(t).then(function(){
