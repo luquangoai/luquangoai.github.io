@@ -539,13 +539,24 @@
 
 
   <!-- Lightbox overlay -->
-  <div id="lb-overlay" onclick="lbClose()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;">
+  <div id="lb-overlay" onclick="lbClose()">
     <img id="lb-img" src="" alt="Enlarged graphical abstract" style="max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6);"/>
     <button onclick="lbClose()" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;line-height:1;" aria-label="Close">&times;</button>
   </div>
-  <style>
-    #lb-overlay { display:none; }
-    #lb-overlay.active { display:flex; }
-  </style>
+<style>
+  #lb-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.88);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  #lb-overlay.active { display: flex; }
+  #lb-img { max-width:92vw; max-height:92vh; border-radius:8px; object-fit:contain; }
+  .sp-ga-img { cursor: zoom-in; }
+</style>
 </body>
 </html>
