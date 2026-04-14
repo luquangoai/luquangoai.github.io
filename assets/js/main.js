@@ -1,8 +1,8 @@
-// ── Theme toggle (dùng localStorage để sync giữa 2 trang) ────
+// ── Theme toggle — synced via localStorage ────────────────────
 (function() {
   var html = document.documentElement;
   var btn  = document.querySelector('[data-theme-toggle]');
-  var saved = localStorage.getItem('theme') || 'light';
+  var saved = (function(){try{return localStorage.getItem('theme')||'light';}catch(e){return 'light';}})();
   html.setAttribute('data-theme', saved);
   function icon(d) {
     if (!btn) return;
@@ -15,16 +15,16 @@
   if (btn) btn.addEventListener('click', function() {
     var t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', t);
-    localStorage.setItem('theme', t);
+    try { localStorage.setItem('theme', t); } catch(e) {}
     icon(t);
   });
 })();
 
-// ── Smooth scroll + active highlight (index.html) ─────────────
+// ── Smooth scroll + active highlight (index.html only) ────────
 (function() {
-  var ids = ['overview','education','experience','projects','services','selected-papers','awards','skills'];
-  var anchors = document.querySelectorAll('nav a[href^="#"]');
+  var anchors = document.querySelectorAll('nav a[href^="#"], .hov-nav-menu a[href^="#"]');
   if (!anchors.length) return;
+  var ids = ['overview','education','experience','projects','services','selected-papers','awards','skills'];
 
   window.addEventListener('scroll', function() {
     var c = 'overview';
@@ -45,7 +45,6 @@
     });
   });
 
-  // Scroll đến section khi vào từ publications.html#education
   if (location.hash) {
     setTimeout(function() {
       var el = document.querySelector(location.hash);
@@ -67,13 +66,13 @@
   }).catch(function(){});
 })();
 
-// ── Cite copy ─────────────────────────────────────────────────
+// ── Cite copy (sp-) ───────────────────────────────────────────
 function spCopy(btn, text) {
   navigator.clipboard.writeText(text.replace(/\\n/g,'\n')).then(function() {
     var orig = btn.innerHTML; btn.innerHTML = '&#10003; Copied!';
     setTimeout(function(){ btn.innerHTML = orig; }, 1800);
   });
-  btn.closest('.sp-cite-menu').classList.remove('open');
+  if (btn.closest('.sp-cite-menu')) btn.closest('.sp-cite-menu').classList.remove('open');
 }
 function spToggle(btn) {
   var menu = btn.nextElementSibling;
@@ -89,10 +88,12 @@ document.addEventListener('click', function(e) {
 // ── Lightbox ─────────────────────────────────────────────────
 function lbOpen(src) {
   var o = document.getElementById('lb-overlay'), i = document.getElementById('lb-img');
-  if (!o||!i) return; i.src=src; o.classList.add('active'); document.body.style.overflow='hidden';
+  if (!o || !i) return;
+  i.src = src; o.classList.add('active'); document.body.style.overflow = 'hidden';
 }
 function lbClose() {
   var o = document.getElementById('lb-overlay');
-  if (o) o.classList.remove('active'); document.body.style.overflow='';
+  if (o) o.classList.remove('active');
+  document.body.style.overflow = '';
 }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') lbClose(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') lbClose(); });
