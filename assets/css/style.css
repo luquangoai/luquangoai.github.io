@@ -305,3 +305,7 @@ footer{border-top:1px solid var(--border);background:var(--surface);padding:1rem
     .hov-nav-group:hover .hov-nav-menu{display:block;pointer-events:auto;opacity:1;transform:translateY(0);}
     .hov-nav-menu a{display:block;padding:.46rem 1.1rem;font-size:.8rem;color:var(--text);text-decoration:none;white-space:nowrap;}
     .hov-nav-menu a:hover{background:var(--surface-2);color:var(--pri);}
+/* GS metrics live update flash */
+.gs-updated .gs-metric-val { animation: gs-flash .6s ease; }
+@keyframes gs-flash { 0%,100%{color:inherit} 40%{color:var(--primary,#01696f)} }
+.gs-metric-val { transition: color .3s; }

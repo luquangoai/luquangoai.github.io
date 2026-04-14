@@ -53,17 +53,61 @@
   }
 })();
 
-// ── Google Scholar metrics ────────────────────────────────────
+// ── Google Scholar metrics (multi-proxy, auto-refresh) ────────
 (function() {
-  var proxy = "https://api.allorigins.win/raw?url=" +
-    encodeURIComponent("https://scholar.google.com/citations?user=w1pGUPMAAAAJ&hl=en");
-  fetch(proxy).then(function(r){ return r.text(); }).then(function(text) {
+  var GS_URL = "https://scholar.google.com/citations?user=w1pGUPMAAAAJ&hl=en";
+  var PROXIES = [
+    "https://api.allorigins.win/raw?url=",
+    "https://corsproxy.io/?",
+    "https://api.codetabs.com/v1/proxy?quest="
+  ];
+
+  var elCite = document.getElementById('gs-cite');
+  var elH    = document.getElementById('gs-h');
+  var elI10  = document.getElementById('gs-i10');
+  var elWrap = document.getElementById('gs-metrics');
+
+  if (!elCite) return;
+
+  // Show loading dots
+  [elCite, elH, elI10].forEach(function(el) {
+    if (el) { el.setAttribute('data-orig', el.textContent); el.textContent = '…'; }
+  });
+
+  function parse(text) {
     var nums = [], re = /class="gsc_rsb_std">(\d+)<\/td>/g, m;
     while ((m = re.exec(text)) !== null) nums.push(parseInt(m[1]));
-    if (nums[0]) { var e=document.getElementById('gs-cite'); if(e) e.textContent=nums[0].toLocaleString(); }
-    if (nums[2]) { var e=document.getElementById('gs-h');    if(e) e.textContent=nums[2]; }
-    if (nums[4]) { var e=document.getElementById('gs-i10');  if(e) e.textContent=nums[4]; }
-  }).catch(function(){});
+    return nums;
+  }
+
+  function update(nums) {
+    if (!nums || nums.length < 5) return false;
+    if (nums[0] && elCite) elCite.textContent = nums[0].toLocaleString();
+    if (nums[2] && elH)    elH.textContent    = nums[2];
+    if (nums[4] && elI10)  elI10.textContent  = nums[4];
+    // Flash update indicator
+    if (elWrap) { elWrap.classList.add('gs-updated'); setTimeout(function(){ elWrap.classList.remove('gs-updated'); }, 1200); }
+    return true;
+  }
+
+  function restore() {
+    [elCite, elH, elI10].forEach(function(el) {
+      if (el && el.getAttribute('data-orig')) el.textContent = el.getAttribute('data-orig');
+    });
+  }
+
+  function tryProxy(i) {
+    if (i >= PROXIES.length) { restore(); return; }
+    fetch(PROXIES[i] + encodeURIComponent(GS_URL), { signal: AbortSignal.timeout(6000) })
+      .then(function(r) { return r.text(); })
+      .then(function(text) {
+        var nums = parse(text);
+        if (!update(nums)) tryProxy(i + 1);
+      })
+      .catch(function() { tryProxy(i + 1); });
+  }
+
+  tryProxy(0);
 })();
 
 // ── Cite copy (sp-) ───────────────────────────────────────────
